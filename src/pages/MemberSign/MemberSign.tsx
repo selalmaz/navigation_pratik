@@ -1,24 +1,36 @@
 import React, {useState} from 'react';
-import {SafeAreaView, Text} from 'react-native';
+import {Alert, SafeAreaView, Text} from 'react-native';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import {RootStackParamList} from '../../types.d';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {User} from '../../userData';
 
-function MemberSign() {
-  const [userName, setUserName] = useState('');
-  const [userSurname, setUserSurname] = useState('');
-  const [userAge, setUserAge] = useState('');
-  const [userMail, setUserMail] = useState('');
+type props = NativeStackScreenProps<RootStackParamList, 'MemberSign'>;
+
+function MemberSign({navigation}: props) {
+  const [userName, setUserName] = useState(null);
+  const [userSurname, setUserSurname] = useState(null);
+  const [userAge, setUserAge] = useState(null);
+  const [userMail, setUserMail] = useState(null);
   // state de pratik kazanmak icin state kullandım
+  // formik kullanılabilir
 
   function handleSubmit() {
-    const user = {
-      userName: userName,
-      userSurname: userSurname,
-      userAge: userAge,
-      userMail: userMail,
+    if (!userName || !userSurname || !userAge || !userMail) {
+      Alert.alert('hata', 'Bilgiler boş bırakılamaz!');
+
+      return 
+    }
+
+    const user: User = {
+      name: userName,
+      surname: userSurname,
+      email: userMail,
+      age: userAge,
     };
 
-    console.log(user);
+    navigation.navigate('MemberResult', {user});
   }
 
   return (
